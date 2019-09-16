@@ -1,0 +1,71 @@
+#board {
+    margin: 30px 30px;
+    float: left;
+    border: 1px solid black;
+}
+
+.line {
+    height: 120px;
+}
+
+.cell {
+    float: left;
+    width: 120px;
+    height: 120px;
+}
+
+.queen {
+    background-color: red;
+    width: 90px;
+    position: absolute;
+    height: 90px;
+    margin-left: -43px;
+    border-radius: 50%;
+    margin-top: 12px;
+}
+
+.cell.even.marked {
+    background-color: green;
+}
+
+.cell.odd.marked {
+    background-color: green;
+}
+
+.cell.even {
+    background-color: lightgray;
+}
+
+.cell.odd {
+    background-color: white;
+}
+
+.figure {
+    width: 100%;
+    height: 100%;
+
+    font-size: 26px;
+    text-align: center;
+
+    cursor: default;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+
+.odd.available {
+    background-color: #d3f8d3;
+}
+
+.even.available {
+    background-color: #b8deb8;
+}
+
+.available:hover {
+    background-color: orange;
+    cursor: move;
+}
+
+.figure.ui-draggable-dragging {
+    background-color: orange;
+}
