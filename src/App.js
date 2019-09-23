@@ -15,7 +15,11 @@ function App() {
   let randomNumbers = [];
 
   for (let i=0 ; i<8;i++){
-    randomNumbers.push(getRandomIntInclusive(1,64))
+    let random = getRandomIntInclusive(0,63);
+    while (randomNumbers.includes(random)){
+      random = getRandomIntInclusive(0,63);
+    }
+    randomNumbers.push(random)
   }
 
   return (
