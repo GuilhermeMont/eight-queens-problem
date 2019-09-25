@@ -123,8 +123,26 @@ class Board extends Component {
         else if (scoreVertical && !scoreHorizontal){
             return scoreVertical;
         }
-        else return scoreHorizontal;
+        else if (scoreHorizontal && !scoreVertical){
+            return scoreHorizontal
+        }
+        else {
+            console.log('return false');
+            return false;
+        }
     };
+
+    static getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+    }
+
+    static check (even,line) {
+        if (line % 2 === 0) return !even;
+        return even
+    }
+
 
 
     hillClimbing = async () => {
@@ -156,24 +174,35 @@ class Board extends Component {
 
         if (changed) {
 
+            if (localMin.line === saveOldPos.line && localMin.pos === saveOldPos.pos){
+                localMin.line = Board.getRandomIntInclusive(0,7);
+                localMin.pos = Board.getRandomIntInclusive(0,7);
+                localMin.even = lines[localMin.line].props.children[localMin.pos].props.even;
+            }
+
             let cell = lines[saveOldPos.line].props.children[saveOldPos.pos];
             lines[saveOldPos.line].props.children[saveOldPos.pos] =
-                <Queen even={cell.props.even} id={cell.props.id} marked={true} queen={false}/>;
+                <Queen even={Board.check(saveQueen.oldQueen % 2 === 0,saveOldPos.line) } id={cell.props.id} marked={true} queen={false}/>;
             lines[localMin.line].props.children[localMin.pos] =
-                <Queen even={localMin.even} id={localMin.id} marked={false} queen={true}/>;
+                <Queen even={Board.check(saveQueen.newQueen % 2 === 0,localMin.line)} id={localMin.id} marked={false} queen={true}/>;
 
             queens[queens.indexOf(saveQueen.oldQueen)] = saveQueen.newQueen;
 
+            console.log('LOCAL MIN',localMin);
+            console.log('OLD POS',saveOldPos);
+            console.log('OLD POS PROPS',cell);
             console.log('RAINHAS',queens);
             this.setState({...this.state, lines: []});
             this.setState({...this.state, lines: lines, globalScore: localMin.score, queens: queens});
         }
+
 
         return true;
     };
 
     moveQueenVertical = async (lines, line, pos) => {
         let score = 0;
+        let changed = false;
 
         for (let i = 0; i < 8; i++) {
             if (lines[i].props.children[pos].props.queen && line !== i) {
@@ -206,6 +235,7 @@ class Board extends Component {
                     bestMove.line = i;
                     bestMove.even = oldCell.props.even;
                     bestMove.id = oldCell.props.id;
+                    changed = true;
                 }
 
                 lines[i].props.children[pos] =
@@ -216,12 +246,13 @@ class Board extends Component {
         lines[line].props.children[pos] =
             <Queen queen={true} marked={false} even={cell.props.even} id={cell.props.id}/>;
 
-        return bestMove;
+        return changed ? bestMove : false;
 
     };
 
     moveQueenHorizontal = async (lines, line, pos) => {
         let score = 0;
+        let changed = false;
 
         for (let i = 0; i < 8; i++) {
             if (lines[line].props.children[i].props.queen && pos !== i) {
@@ -255,6 +286,7 @@ class Board extends Component {
                     bestMove.line = i;
                     bestMove.even = oldCell.props.even;
                     bestMove.id = oldCell.props.id;
+                    changed = true;
                 }
 
                 lines[line].props.children[i] =
@@ -265,7 +297,7 @@ class Board extends Component {
         lines[line].props.children[pos] =
             <Queen queen={true} marked={false} even={cell.props.even} id={cell.props.id}/>;
 
-        return bestMove;
+        return changed ? bestMove : false;
 
     };
 
