@@ -188,10 +188,6 @@ class Board extends Component {
 
             queens[queens.indexOf(saveQueen.oldQueen)] = saveQueen.newQueen;
 
-            console.log('LOCAL MIN',localMin);
-            console.log('OLD POS',saveOldPos);
-            console.log('OLD POS PROPS',cell);
-            console.log('RAINHAS',queens);
             this.setState({...this.state, lines: []});
             this.setState({...this.state, lines: lines, globalScore: localMin.score, queens: queens});
         }
