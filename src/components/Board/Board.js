@@ -200,11 +200,11 @@ class Board extends Component {
         let score = 0;
         let changed = false;
 
-        for (let i = 0; i < 8; i++) {
-            if (lines[i].props.children[pos].props.queen && line !== i) {
-                return false;
-            }
-        }
+        // for (let i = 0; i < 8; i++) {
+        //     if (lines[i].props.children[pos].props.queen && line !== i) {
+        //         return false;
+        //     }
+        // }
 
         let cell = lines[line].props.children[pos];
         lines[line].props.children[pos] =
@@ -221,21 +221,24 @@ class Board extends Component {
         for (let i = 0; i < lines.length; i++) {
             let oldCell = lines[i].props.children[pos];
             if (line !== i) {
-                lines[i].props.children[pos] =
-                    <Queen queen={true} id={oldCell.props.id} marked={false} even={oldCell.props.even}/>;
+                if (!lines[i].props.children[pos].props.queen){
+                    lines[i].props.children[pos] =
+                        <Queen queen={true} id={oldCell.props.id} marked={false} even={oldCell.props.even}/>;
 
-                score = await this.calculateScore(lines);
+                    score = await this.calculateScore(lines);
 
-                if (score < bestMove.score) {
-                    bestMove.score = score;
-                    bestMove.line = i;
-                    bestMove.even = oldCell.props.even;
-                    bestMove.id = oldCell.props.id;
-                    changed = true;
+                    if (score < bestMove.score) {
+                        bestMove.score = score;
+                        bestMove.line = i;
+                        bestMove.even = oldCell.props.even;
+                        bestMove.id = oldCell.props.id;
+                        changed = true;
+                    }
+
+                    lines[i].props.children[pos] =
+                        <Queen queen={false} id={oldCell.props.id} marked={false} even={oldCell.props.even}/>;
                 }
 
-                lines[i].props.children[pos] =
-                    <Queen queen={false} id={oldCell.props.id} marked={false} even={oldCell.props.even}/>;
             }
         }
 
@@ -250,11 +253,11 @@ class Board extends Component {
         let score = 0;
         let changed = false;
 
-        for (let i = 0; i < 8; i++) {
-            if (lines[line].props.children[i].props.queen && pos !== i) {
-                return false;
-            }
-        }
+        // for (let i = 0; i < 8; i++) {
+        //     if (lines[line].props.children[i].props.queen && pos !== i) {
+        //         return false;
+        //     }
+        // }
 
         let cell = lines[line].props.children[pos];
         lines[line].props.children[pos] =
@@ -272,21 +275,23 @@ class Board extends Component {
         for (let i = 0; i < lines.length; i++) {
             let oldCell = lines[line].props.children[i];
             if (line !== i) {
-                lines[line].props.children[i] =
-                    <Queen queen={true} id={oldCell.props.id} marked={false} even={oldCell.props.even}/>;
+                if (!lines[line].props.children[i].props.queen){
+                    lines[line].props.children[i] =
+                        <Queen queen={true} id={oldCell.props.id} marked={false} even={oldCell.props.even}/>;
 
-                score = await this.calculateScore(lines);
+                    score = await this.calculateScore(lines);
 
-                if (score < bestMove.score) {
-                    bestMove.score = score;
-                    bestMove.line = i;
-                    bestMove.even = oldCell.props.even;
-                    bestMove.id = oldCell.props.id;
-                    changed = true;
+                    if (score < bestMove.score) {
+                        bestMove.score = score;
+                        bestMove.line = i;
+                        bestMove.even = oldCell.props.even;
+                        bestMove.id = oldCell.props.id;
+                        changed = true;
+                    }
+
+                    lines[line].props.children[i] =
+                        <Queen queen={false} id={oldCell.props.id} marked={false} even={oldCell.props.even}/>;
                 }
-
-                lines[line].props.children[i] =
-                    <Queen queen={false} id={oldCell.props.id} marked={false} even={oldCell.props.even}/>;
             }
         }
 
